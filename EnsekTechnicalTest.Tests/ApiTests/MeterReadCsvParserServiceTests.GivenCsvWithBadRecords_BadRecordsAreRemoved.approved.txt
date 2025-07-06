@@ -1,0 +1,4 @@
+﻿{
+  "ParsedMeterReadings": [],
+  "FailedParseCount": 4
+}

@@ -1,0 +1,134 @@
+﻿using EnsekTechincalTest.Models;
+using EnsekTechincalTest.Results;
+using EnsekTechincalTest.Services;
+using MeterReadingLibrary.DataAccess;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TextCopy;
+
+namespace EnsekTechnicalTest.Tests.ApiTests
+{
+    public class MeterReadUploadServiceTests
+    {
+        private readonly Mock<IMeterReadCsvParserServcice> _mockMeterReadCsvParserServcice;
+        private readonly Mock<IMeterReadingData> _mockMeterReadingData;
+        private readonly Mock<ISqlDataAccess> _mockSql;
+        private  MeterReadUploadService _sut;
+
+        public MeterReadUploadServiceTests()
+        {
+            _mockMeterReadCsvParserServcice = new Mock<IMeterReadCsvParserServcice>();
+            _mockMeterReadingData = new Mock<IMeterReadingData>();
+            _mockSql = new Mock<ISqlDataAccess>();
+            _sut = new MeterReadUploadService(
+                _mockMeterReadCsvParserServcice.Object,
+                _mockMeterReadingData.Object);
+
+        }
+
+        [Fact]
+        public async void GivenNullStreamExceptionIsThrown()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.UploadMeterReads(null));
+        }
+
+        [Fact]
+        public async void GivenAFailedWrite_AnExceptionIsThrown()
+        {
+
+            var dummyStream = new MemoryStream(Encoding.UTF8.GetBytes("fake,csv,content"));
+
+            var parsedReadings = new List<MeterReadingModel>
+            {
+                new() {   
+                    AccountId = 1, 
+                    MeterReadDateTime = DateTime.UtcNow, 
+                    MeterReadValue = 12345 
+                }
+            };
+
+            _mockMeterReadCsvParserServcice
+                .Setup(x => x.ParseCsv(It.IsAny<Stream>()))
+                .Returns(new MeterReadingParsingResult(parsedReadings, 0));
+
+            _mockMeterReadingData
+                .Setup(x => x.UploadMeterRead(It.IsAny<IEnumerable<MeterReadingModel>>()))
+                .ThrowsAsync(new InvalidOperationException("DB failure"));
+
+            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.UploadMeterReads(dummyStream));
+
+            Assert.Contains("An error occured uploading meter reads", ex.Message);
+            Assert.IsType<InvalidOperationException>(ex.InnerException);
+        }
+
+        [Fact]
+        public async Task UploadMeterRead_WhenSqlThrowsException_ShouldWrapAndThrow()
+        {
+            var _sut = new MeterReadingData(_mockSql.Object);
+
+            var meterReadings = new List<MeterReadingModel>
+            {
+                new() {
+                    AccountId = 1,
+                    MeterReadDateTime = DateTime.UtcNow,
+                    MeterReadValue = 12345
+                }
+            };
+
+            _mockSql.Setup(s => s.UploadMeterRead<int, dynamic>(
+                    It.IsAny<string>(),
+                    It.IsAny<object>(),
+                    It.IsAny<string>()))
+                .ThrowsAsync(new InvalidOperationException("SQL error"));
+
+            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.UploadMeterRead(meterReadings));
+
+            Assert.Contains("An error occured when writing the meter read", ex.Message);
+            Assert.IsType<InvalidOperationException>(ex.InnerException);
+        }
+
+        [Fact]
+        public async Task GivenAMeterReadingIsUploadedSuccessfully_SuccessfulUploadCountWillIncrease()
+        {
+
+            _mockSql.Setup(x => x.UploadMeterRead<int, dynamic>(
+                It.IsAny<string>(), It.IsAny<object>(), "Default"))
+                .ReturnsAsync(1);
+
+            var sut = new MeterReadingData(_mockSql.Object);
+
+            var meterReadings = new List<MeterReadingModel>
+            {
+                new() { AccountId = 1, MeterReadValue = 12345, MeterReadDateTime = DateTime.UtcNow }
+            };
+
+            var result = await sut.UploadMeterRead(meterReadings);
+
+            Assert.Equal(1, result.successfulUploadCount);
+        }
+
+        [Fact]
+        public async Task GivenAMeterReadingIsRejected_RejectedUploadCountWillIncrease()
+        {
+
+            _mockSql.Setup(x => x.UploadMeterRead<int, dynamic>(
+                It.IsAny<string>(), It.IsAny<object>(), "Default"))
+                .ReturnsAsync(0);
+
+            var sut = new MeterReadingData(_mockSql.Object);
+
+            var meterReadings = new List<MeterReadingModel>
+            {
+               new() { AccountId = 2, MeterReadValue = -6, MeterReadDateTime = DateTime.UtcNow }
+            };
+
+            var result = await sut.UploadMeterRead(meterReadings);
+
+            Assert.Equal(1, result.RejectedUploadCount);
+        }
+    }
+}

@@ -1,0 +1,155 @@
+﻿{
+  "ParsedMeterReadings": [
+    {
+      "AccountId": 2344,
+      "MeterReadDateTime": "2019-04-22T09:24:00+01:00",
+      "MeterReadValue": 1002
+    },
+    {
+      "AccountId": 2233,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 323
+    },
+    {
+      "AccountId": 8766,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 3440
+    },
+    {
+      "AccountId": 2344,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 1002
+    },
+    {
+      "AccountId": 2345,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 45522
+    },
+    {
+      "AccountId": 2346,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 999999
+    },
+    {
+      "AccountId": 2347,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 54
+    },
+    {
+      "AccountId": 2348,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 123
+    },
+    {
+      "AccountId": 2350,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 5684
+    },
+    {
+      "AccountId": 2351,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 57579
+    },
+    {
+      "AccountId": 2352,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 455
+    },
+    {
+      "AccountId": 2353,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 1212
+    },
+    {
+      "AccountId": 2354,
+      "MeterReadDateTime": "2019-04-22T12:25:00+01:00",
+      "MeterReadValue": 889
+    },
+    {
+      "AccountId": 2355,
+      "MeterReadDateTime": "2019-05-06T09:24:00+01:00",
+      "MeterReadValue": 1
+    },
+    {
+      "AccountId": 2356,
+      "MeterReadDateTime": "2019-05-07T09:24:00+01:00",
+      "MeterReadValue": 0
+    },
+    {
+      "AccountId": 6776,
+      "MeterReadDateTime": "2019-05-09T09:24:00+01:00",
+      "MeterReadValue": -6575
+    },
+    {
+      "AccountId": 6776,
+      "MeterReadDateTime": "2019-05-10T09:24:00+01:00",
+      "MeterReadValue": 23566
+    },
+    {
+      "AccountId": 1234,
+      "MeterReadDateTime": "2019-05-12T09:24:00+01:00",
+      "MeterReadValue": 9787
+    },
+    {
+      "AccountId": 1236,
+      "MeterReadDateTime": "2019-04-10T19:34:00+01:00",
+      "MeterReadValue": 8898
+    },
+    {
+      "AccountId": 1237,
+      "MeterReadDateTime": "2019-05-15T09:24:00+01:00",
+      "MeterReadValue": 3455
+    },
+    {
+      "AccountId": 1238,
+      "MeterReadDateTime": "2019-05-16T09:24:00+01:00",
+      "MeterReadValue": 0
+    },
+    {
+      "AccountId": 1239,
+      "MeterReadDateTime": "2019-05-17T09:24:00+01:00",
+      "MeterReadValue": 45345
+    },
+    {
+      "AccountId": 1240,
+      "MeterReadDateTime": "2019-05-18T09:24:00+01:00",
+      "MeterReadValue": 978
+    },
+    {
+      "AccountId": 1242,
+      "MeterReadDateTime": "2019-05-20T09:24:00+01:00",
+      "MeterReadValue": 124
+    },
+    {
+      "AccountId": 1243,
+      "MeterReadDateTime": "2019-05-21T09:24:00+01:00",
+      "MeterReadValue": 77
+    },
+    {
+      "AccountId": 1244,
+      "MeterReadDateTime": "2019-05-25T09:24:00+01:00",
+      "MeterReadValue": 3478
+    },
+    {
+      "AccountId": 1245,
+      "MeterReadDateTime": "2019-05-25T14:26:00+01:00",
+      "MeterReadValue": 676
+    },
+    {
+      "AccountId": 1246,
+      "MeterReadDateTime": "2019-05-25T09:24:00+01:00",
+      "MeterReadValue": 3455
+    },
+    {
+      "AccountId": 1247,
+      "MeterReadDateTime": "2019-05-25T09:24:00+01:00",
+      "MeterReadValue": 3
+    },
+    {
+      "AccountId": 1248,
+      "MeterReadDateTime": "2019-05-26T09:24:00+01:00",
+      "MeterReadValue": 3467
+    }
+  ],
+  "FailedParseCount": 0
+}
