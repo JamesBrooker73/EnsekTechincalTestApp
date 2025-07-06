@@ -1,6 +1,8 @@
-﻿using EnsekTechincalTest.Models;
+﻿using EnsekTechincalTest.Exceptions;
+using EnsekTechincalTest.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +17,13 @@ public class MeterReadingData : IMeterReadingData
 
     public MeterReadingData(ISqlDataAccess sql)
     {
-        _sql = sql;
+        _sql = sql ?? throw new ArgumentNullException(nameof(sql));
         meterReadingUploadResult = new MeterReadingUploadResult();
     }
 
 
     public async Task<MeterReadingUploadResult> UploadMeterRead(IEnumerable<MeterReadingModel> meterReadings)
     {
-        List<MeterReadingModel> invalidResults = new List<MeterReadingModel>();
         var query = @"UPDATE customers
                     SET MeterReadValue = RIGHT(REPLICATE('0', 5) + CAST(@MeterReadValue AS VARCHAR(5)), 5),
                         LastMeterReadDateTime = @MeterReadDateTime
@@ -50,15 +51,12 @@ public class MeterReadingData : IMeterReadingData
                 else
                 {
                     meterReadingUploadResult.RejectedUploadCount++;
-                    invalidResults.Add(meterReading);
                 }
-
-
             }
         }
-        catch (Exception ex)
+        catch (WritingException ex)
         {
-           throw new Exception("An error occured when writing the meter read", ex);
+           throw new WritingException("An error occured when writing the meter read", ex);
         }
     
 

@@ -1,9 +1,8 @@
 ﻿using EnsekTechincalTest.Models;
 
-namespace MeterReadingLibrary.DataAccess
+namespace MeterReadingLibrary.DataAccess;
+
+public interface IMeterReadingData
 {
-    public interface IMeterReadingData
-    {
-        Task<MeterReadingUploadResult> UploadMeterRead(IEnumerable<MeterReadingModel> meterReadings);
-    }
+    Task<MeterReadingUploadResult> UploadMeterRead(IEnumerable<MeterReadingModel> meterReadings);
 }

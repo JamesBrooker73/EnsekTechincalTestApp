@@ -1,11 +1,10 @@
-﻿namespace EnsekTechincalTest.Models
+﻿namespace EnsekTechincalTest.Models;
+
+public class MeterReadingModel
 {
-    public class MeterReadingModel
-    {
-        public int AccountId { get; set; }
+    public int AccountId { get; set; }
 
-        public DateTimeOffset MeterReadDateTime { get; set; }
+    public DateTimeOffset MeterReadDateTime { get; set; }
 
-        public int MeterReadValue { get; set; }
-    }
+    public int MeterReadValue { get; set; }
 }

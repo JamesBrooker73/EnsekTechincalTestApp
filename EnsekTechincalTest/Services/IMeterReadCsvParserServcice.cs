@@ -2,10 +2,9 @@
 using EnsekTechincalTest.Models;
 using EnsekTechincalTest.Results;
 
-namespace EnsekTechincalTest.Services
+namespace EnsekTechincalTest.Services;
+
+public interface IMeterReadCsvParserServcice
 {
-    public interface IMeterReadCsvParserServcice
-    {
-        MeterReadingParsingResult ParseCsv(Stream stream);
-    }
+    MeterReadingParsingResult ParseCsv(Stream stream);
 }

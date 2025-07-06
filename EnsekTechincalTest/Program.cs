@@ -1,4 +1,5 @@
 using EnsekTechincalTest.Extensions;
+using MeterReadingLibrary.Seeding;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddSwaggerGen();
 builder.AddCustomServices();
 builder.AddHealthCheckServices();
 //builder.SeedCustomerDatabase();
+
 
 var app = builder.Build();
 

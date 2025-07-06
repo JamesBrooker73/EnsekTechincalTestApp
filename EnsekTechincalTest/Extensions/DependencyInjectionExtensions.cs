@@ -8,6 +8,7 @@ using System.Data;
 using System.Globalization;
 using Dapper;
 using MeterReadingLibrary.DataMap;
+
 namespace EnsekTechincalTest.Extensions;
 
 public static class DependencyInjectionExtensions

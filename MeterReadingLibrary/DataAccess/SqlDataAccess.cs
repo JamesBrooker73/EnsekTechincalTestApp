@@ -11,7 +11,7 @@ public class SqlDataAccess : ISqlDataAccess
 
     public SqlDataAccess(IConfiguration config)
     {
-        _config = config;
+        _config = config ?? throw new ArgumentNullException(nameof(config)); 
     }
 
     public async Task<int> UploadMeterRead<T, U>(string query, U parameters, string connectionStringName)

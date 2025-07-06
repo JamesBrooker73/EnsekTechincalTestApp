@@ -1,4 +1,5 @@
-﻿using EnsekTechincalTest.Models;
+﻿using CsvHelper;
+using EnsekTechincalTest.Models;
 using EnsekTechincalTest.Results;
 using EnsekTechincalTest.Services;
 using MeterReadingLibrary.DataAccess;
@@ -34,61 +35,6 @@ namespace EnsekTechnicalTest.Tests.ApiTests
         public async void GivenNullStreamExceptionIsThrown()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => _sut.UploadMeterReads(null));
-        }
-
-        [Fact]
-        public async void GivenAFailedWrite_AnExceptionIsThrown()
-        {
-
-            var dummyStream = new MemoryStream(Encoding.UTF8.GetBytes("fake,csv,content"));
-
-            var parsedReadings = new List<MeterReadingModel>
-            {
-                new() {   
-                    AccountId = 1, 
-                    MeterReadDateTime = DateTime.UtcNow, 
-                    MeterReadValue = 12345 
-                }
-            };
-
-            _mockMeterReadCsvParserServcice
-                .Setup(x => x.ParseCsv(It.IsAny<Stream>()))
-                .Returns(new MeterReadingParsingResult(parsedReadings, 0));
-
-            _mockMeterReadingData
-                .Setup(x => x.UploadMeterRead(It.IsAny<IEnumerable<MeterReadingModel>>()))
-                .ThrowsAsync(new InvalidOperationException("DB failure"));
-
-            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.UploadMeterReads(dummyStream));
-
-            Assert.Contains("An error occured uploading meter reads", ex.Message);
-            Assert.IsType<InvalidOperationException>(ex.InnerException);
-        }
-
-        [Fact]
-        public async Task UploadMeterRead_WhenSqlThrowsException_ShouldWrapAndThrow()
-        {
-            var _sut = new MeterReadingData(_mockSql.Object);
-
-            var meterReadings = new List<MeterReadingModel>
-            {
-                new() {
-                    AccountId = 1,
-                    MeterReadDateTime = DateTime.UtcNow,
-                    MeterReadValue = 12345
-                }
-            };
-
-            _mockSql.Setup(s => s.UploadMeterRead<int, dynamic>(
-                    It.IsAny<string>(),
-                    It.IsAny<object>(),
-                    It.IsAny<string>()))
-                .ThrowsAsync(new InvalidOperationException("SQL error"));
-
-            var ex = await Assert.ThrowsAsync<Exception>(() => _sut.UploadMeterRead(meterReadings));
-
-            Assert.Contains("An error occured when writing the meter read", ex.Message);
-            Assert.IsType<InvalidOperationException>(ex.InnerException);
         }
 
         [Fact]

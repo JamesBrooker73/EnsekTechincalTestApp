@@ -1,8 +1,7 @@
 ﻿
-namespace MeterReadingLibrary.DataAccess
+namespace MeterReadingLibrary.DataAccess;
+
+public interface ISqlDataAccess
 {
-    public interface ISqlDataAccess
-    {
-        Task<int> UploadMeterRead<T, U>(string query, U parameters, string connectionStringName);
-    }
+    Task<int> UploadMeterRead<T, U>(string query, U parameters, string connectionStringName);
 }

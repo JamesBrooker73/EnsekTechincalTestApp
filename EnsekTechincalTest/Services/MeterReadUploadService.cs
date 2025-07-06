@@ -1,4 +1,6 @@
-﻿using EnsekTechincalTest.Models;
+﻿using CsvHelper;
+using EnsekTechincalTest.Exceptions;
+using EnsekTechincalTest.Models;
 using EnsekTechincalTest.Results;
 using MeterReadingLibrary.DataAccess;
 using System.IO;
@@ -12,42 +14,31 @@ public class MeterReadUploadService : IMeterReadUploadService
 
     public MeterReadUploadService(IMeterReadCsvParserServcice meterReadCsvParserServcice, IMeterReadingData meterReadingData)
     {
-        _meterReadCsvParserServcice = meterReadCsvParserServcice;
-        _meterReadingData = meterReadingData;
+        _meterReadCsvParserServcice = meterReadCsvParserServcice ?? throw new ArgumentNullException(nameof(_meterReadCsvParserServcice));
+        _meterReadingData = meterReadingData ?? throw new ArgumentNullException(nameof(meterReadingData));
 
     }
 
     public async Task<MeterReadUploadResultModel> UploadMeterReads(Stream stream)
     {
-        if (stream is null)
-        {
-            throw new ArgumentNullException(nameof(stream));
-        }
+        ArgumentNullException.ThrowIfNull(stream);
 
         try
         {
-            var result = await ParseAndUploadMeterRead(stream);
-            return result;
+            var parsedResult = _meterReadCsvParserServcice.ParseCsv(stream);
+            var uploadResult = await _meterReadingData.UploadMeterRead(parsedResult.ParsedMeterReadings);
+
+            return new MeterReadUploadResultModel
+            {
+                failedParseCount = parsedResult.FailedParseCount,
+                successfulUploadCount = uploadResult.successfulUploadCount,
+                failedUploadoutCount = uploadResult.RejectedUploadCount
+            };
         }
-        
         catch (Exception ex)
         {
-            throw new Exception("An error occured uploading meter reads.", ex);
+            throw new Exception("An error occurred uploading the meter reads", ex);
         }
     }
 
-
-    public async Task<MeterReadUploadResultModel> ParseAndUploadMeterRead(Stream stream)
-    {
-        var parsedResult = _meterReadCsvParserServcice.ParseCsv(stream);
-
-        var updateResult = await _meterReadingData.UploadMeterRead(parsedResult.ParsedMeterReadings);
-
-        return new MeterReadUploadResultModel
-        {
-            failedParseCount = parsedResult.FailedParseCount,
-            successfulUploadCount = updateResult.successfulUploadCount,
-            failedUploadoutCount = updateResult.RejectedUploadCount
-        };
-    }
 }
